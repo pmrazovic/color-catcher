@@ -1,32 +1,26 @@
-// add eventListener for tizenhwkey
-document.addEventListener('tizenhwkey', function(e) {
+window.onload = function() {
+	
+
+  // add eventListener for tizenhwkey
+  document.addEventListener('tizenhwkey', function(e) {
     if (e.keyName === "back") {
         try {
             tizen.application.getCurrentApplication().exit();
         } catch (ignore) {}
     }
-});
-
-//Vanilla JS
-
-//PLAY IN FULL PAGE VIEW!
+  });
 
 
-window.addEventListener("DOMContentLoaded", game);
+  document.addEventListener('click', action);
+  document.addEventListener('rotarydetent', action);
 
-//General sprite load
-var spriteExplosion = new Image();
-var imgHeart = new Image();
-imgHeart.src = 'images/heart.png';
-var imgRefresh = new Image();
-imgRefresh.src = 'images/refresh.png';
-
-window.onload = function() {
+  //General sprite load
+  var spriteExplosion = new Image();
   spriteExplosion.src = 'images/explosion.png';
-};
-
-//Game
-function game() {
+  var imgHeart = new Image();
+  imgHeart.src = 'images/heart.png';
+  var imgRefresh = new Image();
+  imgRefresh.src = 'images/refresh.png';
 
   //Canvas
   var canvas = document.getElementById('canvas'),
@@ -61,9 +55,6 @@ function game() {
       sizeY : 48,
       deg    : 0
   };
-
-  document.addEventListener('click', action);
-  document.addEventListener('rotarydetent', action);
 
   function drawCircle() {
       var data = [1,1,1,1];
@@ -365,8 +356,8 @@ function game() {
               ctx.font = "10px Helvetica";
               ctx.fillStyle = "white";
               ctx.textBaseline = 'middle';
-              ctx.textAlign = "left";
-              ctx.fillText('Record: '+record+'', cW/2 - 25,cH/2 - 150);
+              ctx.textAlign = "center";
+              ctx.fillText(TIZEN_L10N["record"] + ': '+record, cW/2,cH/2 - 150);
 
               ctx.font = "18px Helvetica";
               ctx.fillStyle = "white";
@@ -383,18 +374,18 @@ function game() {
               ctx.font = "bold 18px Helvetica";
               ctx.fillStyle = "white";
               ctx.textAlign = "center";
-              ctx.fillText("Tap to play...", cW/2,cH/2 - 90);     
+              ctx.fillText(TIZEN_L10N["tap_to_play"], cW/2,cH/2 - 90);     
                 
               ctx.font = "bold 18px Helvetica";
               ctx.fillStyle = "white";
               ctx.textAlign = "center";
-              ctx.fillText("Instructions", cW/2,cH/2 + 100);
+              ctx.fillText(TIZEN_L10N["instructions"], cW/2,cH/2 + 100);
                 
               ctx.font = "14px Helvetica";
               ctx.fillStyle = "white";
               ctx.textAlign = "center";
-              ctx.fillText("Catch the balls with right color", cW/2,cH/2 + 125);
-              ctx.fillText("Use bezel to rotate", cW/2,cH/2 + 145);
+              ctx.fillText(TIZEN_L10N["catch"], cW/2,cH/2 + 125);
+              ctx.fillText(TIZEN_L10N["use_bezel"], cW/2,cH/2 + 145);
               
 
               //ctx.drawImage(imgStart, cW/2 - 50, cH/2 - 50);
@@ -408,19 +399,19 @@ function game() {
           ctx.font = "25px Helvetica";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText("GAME OVER",cW/2,cH/2 - 100);
+          ctx.fillText(TIZEN_L10N["game_over"],cW/2,cH/2 - 100);
 
           ctx.font = "18px Helvetica";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText("Score: "+ roundRecord, cW/2,cH/2 + 100);
+          ctx.fillText(TIZEN_L10N["score"] + ': ' + roundRecord, cW/2,cH/2 + 100);
 
           record = roundRecord > record ? roundRecord : record;
 
           ctx.font = "18px Helvetica";
           ctx.fillStyle = "white";
           ctx.textAlign = "center";
-          ctx.fillText("Record: "+ record, cW/2,cH/2 + 125);
+          ctx.fillText(TIZEN_L10N["record"] + ": "+ record, cW/2,cH/2 + 125);
 
           ctx.drawImage(imgRefresh, cW/2 - 23, cH/2 - 23);
 
