@@ -1,7 +1,21 @@
 window.onload = function() {
-	
-
-  // add eventListener for tizenhwkey
+  // Set the name of the hidden property and the change event for visibility
+  var hidden, visibilityChange; 
+  if (typeof document.hidden !== "undefined") {
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
+  } else if (typeof document.mozHidden !== "undefined") {
+    hidden = "mozHidden";
+    visibilityChange = "mozvisibilitychange";
+  } else if (typeof document.msHidden !== "undefined") {
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
+  } else if (typeof document.webkitHidden !== "undefined") {
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
+  }
+  
+  // Back key event listener
   document.addEventListener('tizenhwkey', function(e) {
     if (e.keyName === "back") {
         try {
@@ -9,12 +23,24 @@ window.onload = function() {
         } catch (ignore) {}
     }
   });
-
-
+  
+  // Visibility change event listener
+  document.addEventListener(visibilityChange, function () {
+	  if (document[hidden]){
+	  	pause = true;
+        document.removeEventListener('click', action);
+        document.removeEventListener('rotarydetent', move);
+	  } else {
+	    pause = false;
+	    countP = 0;
+	    document.addEventListener('click', action);
+	    document.addEventListener('rotarydetent', move);
+	  }
+  }, false);
+  // tap event
   document.addEventListener('click', action);
-  document.addEventListener('rotarydetent', action);
-
-  //General sprite load
+  
+  // Sprites
   var spriteExplosion = new Image();
   spriteExplosion.src = 'images/explosion.png';
   var imgHeart = new Image();
@@ -22,13 +48,13 @@ window.onload = function() {
   var imgRefresh = new Image();
   imgRefresh.src = 'images/refresh.png';
 
-  //Canvas
+  // Setting up the canvas
   var canvas = document.getElementById('canvas'),
       ctx    = canvas.getContext('2d'),
       cH     = ctx.canvas.height = 360,
       cW     = ctx.canvas.width  = 360;
 
-  //Game
+  // Game variables
   var bullets    = [],
       asteroids  = [],
       explosions = [],
@@ -41,9 +67,10 @@ window.onload = function() {
       record     = 0,
       lifes      = 4,
       count      = 0,
+      pause 	 = false,
+      countP 	 = 0,
       playing    = false,
-      gameOver   = false,
-      _planet    = {deg: 0};
+      gameOver   = false;
 
   //Player
   var player = {
@@ -97,19 +124,18 @@ window.onload = function() {
               break;
       }
 
-    var radius = 10;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    ctx.fillStyle = fillColor;
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = strokeColor;
-    ctx.stroke();
+      var radius = 10;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+      ctx.fillStyle = fillColor;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = strokeColor;
+      ctx.stroke();
 
   }
 
   function move(e) {
-	  console.log("nekaj");
 	  if (e.detail.direction == "CW") {
 		  player.deg += 0.261799388;
 		  player.deg %= 2*Math.PI;
@@ -136,16 +162,13 @@ window.onload = function() {
               maxBallSpeed = 2;
               maxBalls = 1;
               lifes = 4;
-              document.removeEventListener('contextmenu', action);
               document.removeEventListener('rotarydetent', move);
           } 
       } else {
           if(e.type == 'click') {
               playing = true;
               document.removeEventListener("rotarydetent", action);
-              document.addEventListener('contextmenu', action);
               document.addEventListener('rotarydetent', move);
-              canvas.setAttribute("class", "playing");
           }
       }
       
@@ -329,11 +352,14 @@ window.onload = function() {
   }
 
   function start() {
-      if(!gameOver) {
+	  if (pause) {
+          if (countP < 1) {
+              countP = 1;
+          }
+      } else if (!gameOver) {
           //Clear
           ctx.clearRect(0, 0, cW, cH);
           ctx.beginPath();
-          
 
           //Player
           _player();
@@ -414,8 +440,6 @@ window.onload = function() {
           ctx.fillText(TIZEN_L10N["record"] + ": "+ record, cW/2,cH/2 + 125);
 
           ctx.drawImage(imgRefresh, cW/2 - 23, cH/2 - 23);
-
-          canvas.removeAttribute('class');
       }
   }
 
@@ -429,10 +453,5 @@ window.onload = function() {
   //Utils
   function random(from, to) {
       return Math.floor(Math.random() * (to - from + 1)) + from;
-  }
-
-  if(~window.location.href.indexOf('full')) {
-      var full = document.getElementsByTagName('a');
-      full[0].setAttribute('style', 'display: none');
   }
 }
