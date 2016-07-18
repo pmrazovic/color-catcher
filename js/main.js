@@ -136,7 +136,7 @@ window.onload = function() {
   }
 
   function move(e) {
-	  if (e.detail.direction == "CW") {
+	  if (e.detail.direction === "CW") {
 		  player.deg += 0.261799388;
 		  player.deg %= 2*Math.PI;
 	  } else {
@@ -148,7 +148,7 @@ window.onload = function() {
   function action(e) {
       e.preventDefault();
       if(gameOver) {
-          if(e.type == 'click') {
+          if(e.type === 'click') {
               gameOver   = false;
               count      = 0;
               bullets    = [];
@@ -165,7 +165,7 @@ window.onload = function() {
               document.removeEventListener('rotarydetent', move);
           } 
       } else {
-          if(e.type == 'click') {
+          if(e.type === 'click') {
               playing = true;
               document.removeEventListener("rotarydetent", action);
               document.addEventListener('rotarydetent', move);
@@ -292,7 +292,7 @@ window.onload = function() {
                       explosions.push(asteroids[i]);
                   }
 
-                  if (lifes == -1) {
+                  if (lifes === -1) {
                       gameOver = true;
                       playing  = false;
                   }
@@ -314,7 +314,7 @@ window.onload = function() {
 
       var spriteY,
           spriteX = 256;
-      if(asteroid.state == 0) {
+      if(asteroid.state === 0) {
           spriteY = 0;
           spriteX = 0;
       } else if (asteroid.state < 8) {
@@ -327,7 +327,7 @@ window.onload = function() {
           spriteY = 768;
       }
 
-      if(asteroid.state == 8 || asteroid.state == 16 || asteroid.state == 24) {
+      if(asteroid.state === 8 || asteroid.state === 16 || asteroid.state === 24) {
           asteroid.stateX = 0;
       }
 
@@ -344,7 +344,7 @@ window.onload = function() {
       );
       asteroid.state += 1;
 
-      if(asteroid.state == 31) {
+      if(asteroid.state === 31) {
           asteroid.extinct = true;
       }
 
@@ -412,9 +412,6 @@ window.onload = function() {
               ctx.textAlign = "center";
               ctx.fillText(TIZEN_L10N["catch"], cW/2,cH/2 + 125);
               ctx.fillText(TIZEN_L10N["use_bezel"], cW/2,cH/2 + 145);
-              
-
-              //ctx.drawImage(imgStart, cW/2 - 50, cH/2 - 50);
           }
       } else if(count < 1) {
           count = 1;
